@@ -9,7 +9,7 @@ import com.example.myapplication.R
 import com.example.myapplication.databinding.ListItemBinding
 import com.example.myapplication.model.Weather
 
-class WeatherListAdapter :
+class WeatherListAdapter(private val listener: OnClickListener) :
     ListAdapter<Weather, WeatherListAdapter.WeatherViewHolder>(DiffUtilCallback()) {
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): WeatherViewHolder {
@@ -22,22 +22,32 @@ class WeatherListAdapter :
         holder.bind(currentItem)
     }
 
-//    interface OnClickListener {
-//        fun onItemClicked(weather: Weather)
-//    }
+    interface OnClickListener {
+        fun onItemClicked(weather: Weather)
+    }
 
     inner class WeatherViewHolder(private val binding: ListItemBinding) :
         RecyclerView.ViewHolder(binding.root) {
+
+        init {
+            binding.apply {
+                root.setOnClickListener {
+                    val position = adapterPosition
+                    val weather = getItem(position)
+                    listener.onItemClicked(weather)
+                }
+            }
+        }
 
         fun bind(weather: Weather) {
             binding.apply {
                 val tempInDouble = 1.8 * (weather.temperature - 273) + 32
                 val fahrenheit = itemView.context.resources.getString(R.string.fahrenheit)
-                val calculated_temperature = String.format(fahrenheit,tempInDouble.toInt())
+                val calculated_temperature = String.format(fahrenheit, tempInDouble.toInt())
                 temperature.text = calculated_temperature
                 type.text = weather.type.map {
                     it.weather_type
-                }.toString().replace("[","").replace("]","")
+                }.toString().replace("[", "").replace("]", "")
             }
         }
     }

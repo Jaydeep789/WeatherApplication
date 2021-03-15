@@ -4,22 +4,25 @@ import android.os.Bundle
 import android.util.Log
 import android.view.View
 import android.widget.Toast
+import androidx.core.os.bundleOf
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.findNavController
 import androidx.navigation.fragment.navArgs
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.myapplication.R
 import com.example.myapplication.databinding.FragmentListBinding
+import com.example.myapplication.model.Weather
 import com.example.myapplication.ui.adapter.WeatherListAdapter
 import com.example.myapplication.utils.DataState
 import com.example.myapplication.viewmodel.WeatherViewmodel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class ListFragment : Fragment(R.layout.fragment_list) {
+class ListFragment : Fragment(R.layout.fragment_list), WeatherListAdapter.OnClickListener {
 
     private val viewModel: WeatherViewmodel by viewModels()
-    private val args : ListFragmentArgs by navArgs()
+    private val args: ListFragmentArgs by navArgs()
     private lateinit var binding: FragmentListBinding
     private val TAG = "ListFragment"
 
@@ -27,7 +30,7 @@ class ListFragment : Fragment(R.layout.fragment_list) {
         super.onViewCreated(view, savedInstanceState)
 
         binding = FragmentListBinding.bind(view)
-        val weatherListAdapter = WeatherListAdapter()
+        val weatherListAdapter = WeatherListAdapter(this)
         binding.apply {
             recycler.apply {
                 adapter = weatherListAdapter
@@ -43,12 +46,12 @@ class ListFragment : Fragment(R.layout.fragment_list) {
                 is DataState.Success -> {
                     displayProgressBar(false)
                     weatherListAdapter.submitList(dataState.data)
-                    Log.e(TAG,dataState.data.toString())
+                    Log.e(TAG, dataState.data.toString())
                 }
                 is DataState.Error -> {
                     displayProgressBar(false)
                     displayError(dataState.exception.message)
-                    Log.e(TAG,dataState.exception.message.toString())
+                    Log.e(TAG, dataState.exception.message.toString())
                 }
                 is DataState.Loading -> {
                     displayProgressBar(true)
@@ -69,8 +72,8 @@ class ListFragment : Fragment(R.layout.fragment_list) {
         }
     }
 
-//    override fun onItemClicked(weather: Weather) {
-//        val action = ListFragmentDirections.actionListFragment2ToDetailFragment2(weather)
-//        findNavController().navigate(action)
-//    }
+    override fun onItemClicked(weather: Weather) {
+        val action = ListFragmentDirections.actionListFragmentToDetailFragment(weather)
+        findNavController().navigate(action)
+    }
 }
