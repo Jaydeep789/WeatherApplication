@@ -43,8 +43,8 @@ class WeatherListAdapter(private val listener: OnClickListener) :
             binding.apply {
                 val tempInDouble = 1.8 * (weather.temperature - 273) + 32
                 val fahrenheit = itemView.context.resources.getString(R.string.fahrenheit)
-                val calculated_temperature = String.format(fahrenheit, tempInDouble.toInt())
-                temperature.text = calculated_temperature
+                val calculatedTemperature = String.format(fahrenheit, tempInDouble.toInt())
+                temperature.text = calculatedTemperature
                 type.text = weather.type.map {
                     it.weather_type
                 }.toString().replace("[", "").replace("]", "")

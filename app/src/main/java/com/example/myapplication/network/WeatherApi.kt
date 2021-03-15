@@ -3,7 +3,7 @@ package com.example.myapplication.network
 import retrofit2.http.GET
 import retrofit2.http.Query
 
-interface weatherApi {
+interface WeatherApi {
 
     @GET("forecast")
     suspend fun getForecast(

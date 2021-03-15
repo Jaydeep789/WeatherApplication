@@ -1,7 +1,6 @@
 package com.example.myapplication.di
 
-import android.provider.SyncStateContract
-import com.example.myapplication.network.weatherApi
+import com.example.myapplication.network.WeatherApi
 import com.example.myapplication.utils.Constants
 
 import com.google.gson.GsonBuilder
@@ -28,7 +27,7 @@ object ApiModule {
 
     @Singleton
     @Provides
-    fun providesWeatherServiceApi(retrofit: Retrofit) : weatherApi{
-        return retrofit.create(weatherApi::class.java)
+    fun providesWeatherServiceApi(retrofit: Retrofit): WeatherApi {
+        return retrofit.create(WeatherApi::class.java)
     }
 }

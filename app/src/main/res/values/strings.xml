@@ -2,5 +2,7 @@
     <string name="app_name">My Application</string>
     <string name="enter_a_city_name">Enter a city name</string>
     <string name="lookup">Lookup</string>
-    <string name="fahrenheit">%1$d °F</string>
+    <string name="fahrenheit">Temp: %1$d°F</string>
+    <string name="degree">%1$d °F</string>
+    <string name="feels_like">Feels Like: %1$d°F</string>
 </resources>

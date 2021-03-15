@@ -1,10 +1,9 @@
 package com.example.myapplication.ui.fragments
 
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.Toast
-import androidx.core.os.bundleOf
+import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.fragment.findNavController
@@ -24,12 +23,13 @@ class ListFragment : Fragment(R.layout.fragment_list), WeatherListAdapter.OnClic
     private val viewModel: WeatherViewmodel by viewModels()
     private val args: ListFragmentArgs by navArgs()
     private lateinit var binding: FragmentListBinding
-    private val TAG = "ListFragment"
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
         binding = FragmentListBinding.bind(view)
+
+        (activity as AppCompatActivity).supportActionBar?.title = args.city
         val weatherListAdapter = WeatherListAdapter(this)
         binding.apply {
             recycler.apply {
@@ -46,12 +46,10 @@ class ListFragment : Fragment(R.layout.fragment_list), WeatherListAdapter.OnClic
                 is DataState.Success -> {
                     displayProgressBar(false)
                     weatherListAdapter.submitList(dataState.data)
-                    Log.e(TAG, dataState.data.toString())
                 }
                 is DataState.Error -> {
                     displayProgressBar(false)
                     displayError(dataState.exception.message)
-                    Log.e(TAG, dataState.exception.message.toString())
                 }
                 is DataState.Loading -> {
                     displayProgressBar(true)
@@ -73,7 +71,7 @@ class ListFragment : Fragment(R.layout.fragment_list), WeatherListAdapter.OnClic
     }
 
     override fun onItemClicked(weather: Weather) {
-        val action = ListFragmentDirections.actionListFragmentToDetailFragment(weather)
+        val action = ListFragmentDirections.actionListFragmentToDetailFragment(weather, args.city)
         findNavController().navigate(action)
     }
 }
